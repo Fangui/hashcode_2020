@@ -5,13 +5,28 @@
 #include "algo-gen.hh"
 #include "parse.hh"
 
-int main(void)
+std::unordered_map<int, std::unordered_set<unsigned char>> Photo::photos_h;
+std::unordered_map<int, std::unordered_set<unsigned char>> Photo::photos_v;
+
+int main(int argc, char *argv[])
 {
+    if (argc < 2)
+    {
+        std::cerr << "Usage: " << argv[0] <<  " fic.txt \n";
+        return 1;
+    }
+
+
     using entity = std::vector<Photo>;
+
+
+
+    parse_input(argv[1], 'H');
+    parse_input(argv[1], 'V');
 
     AlgoGen<entity>::score_f score = [](const entity&) { return 0.; };
 
-    AlgoGen<entity>::generation_f generation = []() { return Photo{}; };
+    AlgoGen<entity>::generation_f generation = []() { return std::vector<Photo>(); };
 
     AlgoGen<entity>::mutation_f mutation = [](const std::map<double, entity>&) {
         return std::vector<entity>{};
