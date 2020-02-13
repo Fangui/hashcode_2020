@@ -1,8 +1,8 @@
-#include <ofstream>
+#include <fstream>
 
 #include "parse.hh"
 
-auto dump = [](const entity& e) {
+AlgoGen<entity>::dump_f dump = [](const entity& e) {
     std::ofstream file("res");
     if (!file.is_open())
         std::cerr << "Failed open res file" << std::endl;

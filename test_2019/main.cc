@@ -4,18 +4,14 @@
 
 #include "algo-gen.hh"
 #include "parse.hh"
-#include "photo.hh"
-
-std::unordered_map<int, std::unordered_set<unsigned char>> Photo::photos_h;
-std::unordered_map<int, std::unordered_set<unsigned char>> Photo::photos_v;
+#include "score.hh"
+#include "dump.hh"
 
 int main(int argc, char* argv[])
 {
-    using entity = std::vector<Photo>;
 
     parse();
 
-    AlgoGen<entity>::score_f score = [](const entity&) { return 0.; };
 
     AlgoGen<entity>::generation_f generation = []() {
         return std::vector<Photo>();
