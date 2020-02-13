@@ -9,8 +9,8 @@ struct Photo;
 
 using entity = std::vector<Photo>;
 
-std::unordered_map<int, std::unordered_set<unsigned char>> photos_h;
-std::unordered_map<int, std::unordered_set<unsigned char>> photos_v;
+std::unordered_map<int, std::unordered_set<size_t>> photos_h;
+std::unordered_map<int, std::unordered_set<size_t>> photos_v;
 
 void parse()
 {
@@ -24,7 +24,7 @@ void parse()
         std::cin >> type;
         size_t m;
         std::cin >> m;
-        std::unordered_set<unsigned char> labels;
+        std::unordered_set<size_t> labels;
         for (auto j = 0u; j < m; j++)
         {
             std::string label;
@@ -86,6 +86,6 @@ struct Photo
         tags_.insert(tags2->second.begin(), tags2->second.end());
     }
 
-    std::unordered_set<unsigned char> tags_;
+    std::unordered_set<size_t> tags_;
     std::pair<int, int> ids_;
 };

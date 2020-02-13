@@ -20,6 +20,8 @@ int main(void)
     };
 
     auto gen = AlgoGen<entity>(score, generation, mutation, dump);
+
     std::cout << score(gen(50)) << std::endl;
+
     return 0;
 }
