@@ -1,3 +1,5 @@
+#include <limits>
+
 template <typename T>
 AlgoGen<T>::AlgoGen(score_f score, generation_f generation, mutation_f mutation,
                     dump_f dump)
@@ -17,11 +19,18 @@ T AlgoGen<T>::apply(const unsigned size, const unsigned max_iterations)
         bests.emplace(score_(entity), entity);
     }
 
+    double best_score = -std::numeric_limits<double>::infinity();
+
     for (auto i = 0u; i < max_iterations; ++i)
     {
         auto new_gen = mutation_(bests);
         update_bests(bests, new_gen);
-        dump_(bests.end()->second);
+        if (bests.end()->first > best_score)
+        {
+            best_score = bests.end()->first;
+            std::cout << "Best Score: " << best_score << std::endl;
+            dump_(bests.end()->second);
+        }
     }
     return bests.end()->second;
 }
