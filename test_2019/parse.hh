@@ -1,8 +1,9 @@
 #pragma once
 
 #include <iostream>
-#include <unordered_set>
 #include <unordered_map>
+#include <unordered_set>
+#include <vector>
 
 struct Photo;
 
@@ -11,7 +12,41 @@ using entity = std::vector<Photo>;
 std::unordered_map<int, std::unordered_set<unsigned char>> photos_h;
 std::unordered_map<int, std::unordered_set<unsigned char>> photos_v;
 
-void parse();
+void parse()
+{
+    std::unordered_map<std::string, size_t> dict_labels;
+    size_t n;
+    std::cin >> n;
+    size_t nb_label = 0;
+    for (auto i = 0u; i < n; i++)
+    {
+        char type;
+        std::cin >> type;
+        size_t m;
+        std::cin >> m;
+        std::unordered_set<unsigned char> labels;
+        for (auto j = 0u; j < m; j++)
+        {
+            std::string label;
+            std::cin >> label;
+            auto found = dict_labels.find(label);
+            if (found == dict_labels.end())
+            {
+                dict_labels.emplace(label, nb_label);
+                labels.insert(nb_label);
+                nb_label++;
+            } else
+            {
+                labels.insert(found->second);
+            }
+        }
+
+        if (type == 'V')
+            photos_v.emplace(i, labels);
+        else
+            photos_h.emplace(i, labels);
+    }
+}
 
 struct Photo
 {

@@ -3,15 +3,13 @@
 #include <vector>
 
 #include "algo-gen.hh"
+#include "dump.hh"
 #include "parse.hh"
 #include "score.hh"
-#include "dump.hh"
 
-int main(int argc, char* argv[])
+int main(void)
 {
-
     parse();
-
 
     AlgoGen<entity>::generation_f generation = []() {
         return std::vector<Photo>();
