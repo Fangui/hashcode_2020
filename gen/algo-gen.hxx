@@ -29,6 +29,7 @@ T AlgoGen<T>::apply(const unsigned size, const unsigned max_iterations)
     std::vector<entity> new_gens[4];
     for (auto i = 0u; i < max_iterations; ++i)
     {
+        double prev_score = best_score;
 #pragma omp parallel for
         for (int i = 0; i < 4; ++i) // FIXME nb thread
             new_gens[i] = mutation_(bests);
@@ -39,10 +40,11 @@ T AlgoGen<T>::apply(const unsigned size, const unsigned max_iterations)
             if (bests.rbegin()->first > best_score)
             {
                 best_score = bests.rbegin()->first;
-                dump_(bests.rbegin()->second);
+          //      dump_(bests.rbegin()->second);
             }
         }
-        std::cerr << "Best Score: " << best_score << std::endl;
+
+        std::cerr << "Best Score: " << best_score << " improve : " << best_score - prev_score << '\n';
     }
     return bests.rbegin()->second;
 }

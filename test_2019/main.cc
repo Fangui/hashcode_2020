@@ -54,7 +54,7 @@ int main(int argc, char* argv[])
             {
                 auto new_entity = entity(gen.second);
 
-                size_t nb_mut = std::rand() % 200;
+                size_t nb_mut = 40;
                 for (auto i = 0u; i < nb_mut; i++)
                 {
                     size_t i_1 = std::rand() % new_entity.size();
