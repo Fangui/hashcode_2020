@@ -1,10 +1,12 @@
 #include <limits>
 
 template <typename T>
-AlgoGen<T>::AlgoGen(score_f score, generation_f generation, mutation_f mutation)
+AlgoGen<T>::AlgoGen(score_f score, generation_f generation, mutation_f mutation,
+                    dump_f dump)
     : score_(score)
     , generation_(generation)
     , mutation_(mutation)
+    , dump_(dump)
 {}
 
 template <typename T>
@@ -26,8 +28,9 @@ T AlgoGen<T>::apply(const unsigned size, const unsigned max_iterations)
         if (bests.rbegin()->first > best_score)
         {
             best_score = bests.rbegin()->first;
-            std::cerr << "Best Score: " << best_score << std::endl;
+            dump_(bests.rbegin()->second);
         }
+        std::cerr << "Best Score: " << best_score << std::endl;
     }
     return bests.rbegin()->second;
 }

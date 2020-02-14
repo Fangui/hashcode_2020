@@ -9,9 +9,25 @@
 #include "parse.hh"
 #include "score.hh"
 
-int main(void)
+int main(int argc, char* argv[])
 {
+    if (argc != 2)
+    {
+        std::cerr << "usage: " << argv[0] << " SAVE_FILE" << std::endl;
+        return 1;
+    }
+
     parse();
+
+    AlgoGen<entity>::dump_f dump = [argv](const entity& entity) {
+        auto file = std::ofstream(argv[1]);
+        if (!file.is_open())
+        {
+            std::cerr << "Couldn't open " << argv[1] << std::endl;
+            exit(2);
+        }
+        file << entity;
+    };
 
     AlgoGen<entity>::generation_f generation = []() {
         auto res = std::vector<Photo>{};
@@ -31,25 +47,28 @@ int main(void)
         return res;
     };
 
-    AlgoGen<entity>::mutation_f mutation = [](const std::map<double, entity>& best) {
-        std::vector<entity> new_gen;
-        for (const auto& gen : best) {
-            auto new_entity = entity(gen.second);
+    AlgoGen<entity>::mutation_f mutation =
+        [](const std::map<double, entity>& best) {
+            std::vector<entity> new_gen;
+            for (const auto& gen : best)
+            {
+                auto new_entity = entity(gen.second);
 
-            for (auto i = 0u; i < 4; i++) {
-                size_t i_1 = std::rand() % new_entity.size();
-                size_t i_2 = std::rand() % new_entity.size();
-                std::swap(new_entity[i_1], new_entity[i_2]);
+                for (auto i = 0u; i < 4; i++)
+                {
+                    size_t i_1 = std::rand() % new_entity.size();
+                    size_t i_2 = std::rand() % new_entity.size();
+                    std::swap(new_entity[i_1], new_entity[i_2]);
+                }
+
+                new_gen.push_back(new_entity);
             }
+            return new_gen;
+        };
 
-            new_gen.push_back(new_entity);
-        }
-        return new_gen;
-    };
+    auto gen = AlgoGen<entity>(score, generation, mutation, dump);
 
-    auto gen = AlgoGen<entity>(score, generation, mutation);
-
-    std::cout << gen(50);
+    std::cout << gen(10);
 
     return 0;
 }
