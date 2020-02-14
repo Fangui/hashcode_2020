@@ -9,8 +9,8 @@ AlgoGen<entity>::score_f score = [](const entity& entity) {
     double result = 0.;
     for (auto i = 0u; i < entity.size() - 1; i++)
     {
-        const auto& tags_1 = entity[i].tags_;
-        const auto& tags_2 = entity[i + 1].tags_;
+        const auto& tags_1 = entity[i]->tags_;
+        const auto& tags_2 = entity[i + 1]->tags_;
         std::unordered_set<size_t> u;
         u.insert(tags_1.begin(), tags_1.end());
         u.insert(tags_2.begin(), tags_2.end());

@@ -9,6 +9,21 @@
 #include "parse.hh"
 #include "score.hh"
 
+
+std::vector<entity> cross_over(const entity& e1, const entity& e2) {
+    unsigned int nb_segment = 2;
+    size_t segment_size = e1.size() / nb_segment;
+    std::vector<entity> result;
+
+    for (auto i = 0u; i < nb_segment; i++) {
+        entity child = entity(e1);
+        child.erase(e2.begin(), e2.begin() + segment_size);
+    }
+
+    return result;
+}
+
+
 int main(int argc, char* argv[])
 {
     if (argc != 2)
@@ -30,17 +45,17 @@ int main(int argc, char* argv[])
     };
 
     AlgoGen<entity>::generation_f generation = []() {
-        auto res = std::vector<Photo>{};
+        auto res = std::vector<std::shared_ptr<Photo>>{};
         for (const auto& p : photos_h)
-            res.emplace_back(p.first);
+            res.push_back(Photo::get(p.first));
 
         auto verts = std::vector<size_t>{};
         for (const auto& p : photos_v)
-            verts.emplace_back(p.first);
+            verts.push_back(p.first);
         std::random_shuffle(verts.begin(), verts.end());
 
         for (auto i = 0u; i < verts.size(); i += 2)
-            res.emplace_back(verts[i], verts[i + 1]);
+            res.push_back(Photo::get(verts[i], verts[i + 1]));
 
         std::random_shuffle(res.begin(), res.end());
 

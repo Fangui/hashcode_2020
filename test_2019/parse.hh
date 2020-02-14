@@ -1,18 +1,20 @@
 #pragma once
 
 #include <iostream>
+#include <memory>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
 
 struct Photo;
 
-using entity = std::vector<Photo>;
+using entity = std::vector<std::shared_ptr<Photo>>;
 
-std::unordered_map<int, std::unordered_set<size_t>> photos_h;
-std::unordered_map<int, std::unordered_set<size_t>> photos_v;
 
-void parse()
+extern std::unordered_map<int, std::unordered_set<size_t>> photos_h;
+extern std::unordered_map<int, std::unordered_set<size_t>> photos_v;
+
+inline void parse()
 {
     std::unordered_map<std::string, size_t> dict_labels;
     size_t n;
@@ -54,42 +56,40 @@ void parse()
 
 struct Photo
 {
-    Photo() = default;
+    public:
 
-    Photo(int id)
-    {
-        ids_ = std::make_pair(id, -1);
-        auto tags = photos_h.find(id);
+        std::unordered_set<size_t> tags_;
+        std::pair<int, int> ids_;
 
-        if (tags == photos_h.end())
-            tags = photos_v.find(id);
+        static std::shared_ptr<Photo> get(int id);
+        static std::shared_ptr<Photo> get(int id1, int id2);
 
-        if (tags == photos_v.end())
+    private:
+        Photo() = default;
+
+        Photo(const Photo&) = delete;
+        Photo& operator=(const Photo&) = delete;
+
+        Photo(int id1, int id2)
         {
-            std::cerr << "Warning, strange behaviour ? tags not found \n";
-            return;
+            auto tags1 = photos_v.find(id1);
+            auto tags2 = photos_v.find(id2);
+            if (id2 == -1)
+                tags1 = photos_h.find(id1);
+
+            ids_ = std::make_pair(id1, id2);
+            if (tags1 == photos_v.end() || (tags2 == photos_v.end() && id2 != -1))
+            {
+                std::cerr
+                    << "Warning, strange behaviour ? tags1 or tags2 not found" << id1 << "  " << id2 << " \n";
+                return;
+            }
+
+
+            tags_ = tags1->second;
+            if (id2 != -1)
+                tags_.insert(tags2->second.begin(), tags2->second.end());
         }
 
-        tags_ = tags->second;
-    }
-
-    Photo(int id1, int id2)
-    {
-        auto tags1 = photos_v.find(id1);
-        auto tags2 = photos_v.find(id2);
-
-        ids_ = std::make_pair(id1, id2);
-        if (tags1 == photos_v.end() || tags2 == photos_v.end())
-        {
-            std::cerr
-                << "Warning, strange behaviour ? tags1 or tags2 not found \n";
-            return;
-        }
-
-        tags_ = tags1->second;
-        tags_.insert(tags2->second.begin(), tags2->second.end());
-    }
-
-    std::unordered_set<size_t> tags_;
-    std::pair<int, int> ids_;
+        static inline std::unordered_map<size_t, std::shared_ptr<Photo>> cache;
 };
