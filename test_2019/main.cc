@@ -9,17 +9,26 @@
 #include "parse.hh"
 #include "score.hh"
 
+entity create_child(const entity& e1, const entity& e2, size_t start, size_t end) {
+    entity child = entity(e1);
+    auto segment_start = e2.begin() + start;
+    auto segment_end = e2.begin() + end;
+    for (auto& it = segment_start; it != segment_end; it++) {
+        child.erase(std::find(child.begin(), child.end(), *it));
+    }
+    child.insert(child.end(), segment_start, segment_end);
+    return child;
+}
+
 
 std::vector<entity> cross_over(const entity& e1, const entity& e2) {
     unsigned int nb_segment = 2;
     size_t segment_size = e1.size() / nb_segment;
     std::vector<entity> result;
-
     for (auto i = 0u; i < nb_segment; i++) {
-        entity child = entity(e1);
-        child.erase(e2.begin(), e2.begin() + segment_size);
+        result.push_back(create_child(e1, e2, i * segment_size, (i + 1) * segment_size));
+        result.push_back(create_child(e2, e1, i * segment_size, (i + 1) * segment_size));
     }
-
     return result;
 }
 
@@ -68,8 +77,9 @@ int main(int argc, char* argv[])
             for (const auto& gen : best)
             {
                 auto new_entity = entity(gen.second);
-
-                for (auto i = 0u; i < 4; i++)
+                
+                // mutation
+                for (auto i = 0u; i < 400; i++)
                 {
                     size_t i_1 = std::rand() % new_entity.size();
                     size_t i_2 = std::rand() % new_entity.size();
@@ -78,6 +88,8 @@ int main(int argc, char* argv[])
 
                 new_gen.push_back(new_entity);
             }
+            auto cross = cross_over(best.rbegin()->second, (++best.rbegin())->second);
+            new_gen.insert(new_gen.end(), cross.begin(), cross.end());
             return new_gen;
         };
 
