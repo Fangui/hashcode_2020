@@ -17,6 +17,7 @@ void parse()
     std::unordered_map<std::string, size_t> dict_labels;
     size_t n;
     std::cin >> n;
+    std::cerr << "Number photo: " << n << std::endl;
     size_t nb_label = 0;
     for (auto i = 0u; i < n; i++)
     {
@@ -46,6 +47,9 @@ void parse()
         else
             photos_h.emplace(i, labels);
     }
+    std::cerr << "Number tags: " << nb_label << std::endl;
+    std::cerr << "Number vertical photo: " << photos_v.size() << std::endl;
+    std::cerr << "Number horizontal photo: " << photos_h.size() << std::endl;
 }
 
 struct Photo
