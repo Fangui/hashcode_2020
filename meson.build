@@ -4,11 +4,10 @@ project('hashcode', 'cpp',
 
 inc = include_directories('gen', 'test_2019/')
 
-cc = meson.get_compiler('cpp')
-libgomp = cc.find_library('gomp')
+openmp = dependency('openmp')
 
 executable('main',
            'test_2019/main.cc',
            c_args: '-fopenmp',
-           dependencies : libgomp,
+           dependencies : openmp,
            include_directories: inc)
