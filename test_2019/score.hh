@@ -2,11 +2,14 @@
 
 #include <algorithm>
 #include <unordered_set>
+#include <omp.h>
 
 #include "algo-gen.hh"
 
 AlgoGen<entity>::score_f score = [](const entity& entity) {
     double result = 0.;
+
+#pragma omp parallel for schedule (dynamic) reduction(+:result)
     for (auto i = 0u; i < entity.size() - 1; i++)
     {
         const auto& tags_1 = entity[i].tags_;
