@@ -27,7 +27,8 @@ T AlgoGen<T>::apply(const unsigned size, const unsigned max_iterations)
     //int max_thread = omp_get_max_threads();
 
     std::vector<entity> new_gens[4];
-    for (auto i = 0u; i < max_iterations; ++i)
+//    for (auto i = 0u; i < max_iterations; ++i)
+    while (1)
     {
         double prev_score = best_score;
 #pragma omp parallel for
@@ -43,8 +44,8 @@ T AlgoGen<T>::apply(const unsigned size, const unsigned max_iterations)
           //      dump_(bests.rbegin()->second);
             }
         }
-
-        std::cerr << "Best Score: " << best_score << " improve : " << best_score - prev_score << '\n';
+        if (best_score - prev_score > 0)
+            std::cerr << "Best Score: " << best_score << " improve : " << best_score - prev_score << '\n';
     }
     return bests.rbegin()->second;
 }

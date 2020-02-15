@@ -54,12 +54,34 @@ int main(int argc, char* argv[])
             {
                 auto new_entity = entity(gen.second);
 
-                size_t nb_mut = 40;
+                size_t nb_mut = 1;
                 for (auto i = 0u; i < nb_mut; i++)
                 {
                     size_t i_1 = std::rand() % new_entity.size();
                     size_t i_2 = std::rand() % new_entity.size();
                     std::swap(new_entity[i_1], new_entity[i_2]);
+                    // if find 2 verticales
+                    if (new_entity[i_1].ids_.second != -1 && new_entity[i_2].ids_.second != -1)
+                    {
+                        if (std::rand() % 2) // if random swap verticales
+                        {
+                            if (i_1 % 2)
+                            {
+                                if (i_2 % 2)
+                                    std::swap(new_entity[i_1].ids_.second, new_entity[i_2].ids_.second);
+                                else
+                                    std::swap(new_entity[i_1].ids_.second, new_entity[i_2].ids_.first);
+                            }
+                            else
+                            {
+                                if (i_2 % 2)
+                                    std::swap(new_entity[i_1].ids_.first, new_entity[i_2].ids_.second);
+                                else
+                                    std::swap(new_entity[i_1].ids_.first, new_entity[i_2].ids_.first);
+                            }
+                        }
+
+                    }
                 }
 
                 new_gen.push_back(new_entity);
