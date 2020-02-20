@@ -25,5 +25,5 @@ struct Endpoint
 {
     std::vector<Connection> connections;
     int latency_dc;
-    std::unordered_map<int, int> requests;
+    std::unordered_map<int, int> requests; // first ->idx videos, second -> nb view
 };
