@@ -63,6 +63,8 @@ std::vector<unsigned int> sort_libraries() {
     std::vector<unsigned int> id_libraries{};
     for (auto i = 0u; i < libraries.size(); i++) {
         auto res = select_library(available_libraries, available_books);
+        if (res == -1)
+            break;
         id_libraries.push_back(res);
     }
 
