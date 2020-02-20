@@ -23,9 +23,9 @@ using result = std::vector<Output>;
 
 // Declare global variables used to store parsed data.
 // You might want to pre-process the data
-unsigned int days;
-std::vector<unsigned int> books;
-std::vector<Library> libraries;
+extern unsigned int days;
+extern std::vector<unsigned int> books;
+extern std::vector<Library> libraries;
 
 inline void parse()
 {
