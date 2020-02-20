@@ -7,6 +7,7 @@
 #include "dump.hh"
 #include "parse.hh"
 #include "score.hh"
+#include "struct.hh"
 
 int main(int argc, char* argv[])
 {
