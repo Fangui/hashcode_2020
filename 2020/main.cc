@@ -29,9 +29,14 @@ result compute_result(std::vector<unsigned> id_libs)
 
         auto books_lib = std::vector<unsigned>(libraries[id_lib].books.begin(),
                                                libraries[id_lib].books.end());
-        for (auto it = books_lib.begin(); it != books_lib.end(); it++)
+        auto it = books_lib.begin();
+        while (it != books_lib.end())
+        {
             if (books_marks[*it])
-                books_lib.erase(it);
+                it = books_lib.erase(it);
+            else
+                it++;
+        }
 
         std::sort(books_lib.begin(), books_lib.end(),
                   [](unsigned a, unsigned b) { return books[a] > books[b]; });
