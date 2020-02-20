@@ -15,4 +15,5 @@ struct Library
     unsigned efficiency;
 
     std::unordered_set<unsigned int> books;
+    std::vector<unsigned int> book_scores;
 };

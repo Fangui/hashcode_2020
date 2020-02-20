@@ -1,20 +1,25 @@
+#include <algorithm>
 #include <vector>
 #include "struct.hh"
 #include "parse.hh"
 
-int compute_intersection(const std::unordered_set<unsigned int>& books_library, const std::unordered_set<unsigned int>& available) {
+int compute_intersection(const Library &library,
+                         const std::unordered_set<unsigned int> &available, const unsigned cur_day) {
     int score = 0;
 
-    for (auto b: books_library) {
-        if (available.find(b) != available.end())
-            score += books[b];
+    unsigned possible = (days - cur_day - library.signup) * library.efficiency;
+
+    for (unsigned int i = 0; i < library.book_scores.size() && i < possible; i++) {
+        if (available.find(library.book_scores[i]) != available.end()) {
+            score += books[library.book_scores[i]];
+        }
     }
 
     return score;
 }
 
 int select_library(std::unordered_set<unsigned int> &available_library,
-                            std::unordered_set<unsigned int> &available_books) {
+                   std::unordered_set<unsigned int> &available_books) {
 
     static unsigned cur_day = 0;
     int result = 0;
@@ -27,9 +32,9 @@ int select_library(std::unordered_set<unsigned int> &available_library,
         if (days < cur_day + li.signup)
             continue;
 
-        float score = compute_intersection(li.books, available_books) / li.signup;
+        float score = compute_intersection(li, available_books, cur_day) / li.signup;
         if (score > max_score) {
-            max_score = score ;
+            max_score = score;
             result = *it;
         }
     }
@@ -41,8 +46,7 @@ int select_library(std::unordered_set<unsigned int> &available_library,
 
     if (days > cur_day + libraries[result].signup)
         cur_day += libraries[result].signup;
-    else
-    {
+    else {
         std::cerr << "warning bad behaviour \n";
         return -1;
     }
@@ -59,6 +63,11 @@ std::vector<unsigned int> sort_libraries() {
     }
     for (auto i = 0u; i < libraries.size(); i++) {
         available_libraries.insert(i);
+        for (const auto b : libraries[i].books) {
+            libraries[i].book_scores.push_back(b);
+        }
+        std::sort(libraries[i].book_scores.begin(), libraries[i].book_scores.end(),
+                  [](unsigned int a, unsigned int b) { return books[a] > books[b]; });
     }
 
     // Iterate
