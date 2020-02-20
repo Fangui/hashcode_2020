@@ -60,7 +60,6 @@ std::vector<unsigned int> sort_libraries() {
     std::vector<unsigned int> id_libraries{};
     for (auto i = 0u; i < libraries.size(); i++) {
         id_libraries.push_back(select_library(available_libraries, available_books));
-        std::cerr << id_libraries[id_libraries.size() - 1] << "\n";
     }
 
     return id_libraries;
