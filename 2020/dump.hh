@@ -6,6 +6,14 @@
 
 std::ostream& operator<<(std::ostream& o, const result& e)
 {
-    // TODO Implement dump of a result
+    o << e.size() << std::endl;
+    for (const auto& el : e)
+    {
+        o << el.id_library << " " << el.books.size() << std::endl;
+        for (const auto& id : el.books)
+            o << id << " ";
+        o << std::endl;
+    }
+
     return o;
 }
