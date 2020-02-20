@@ -67,7 +67,6 @@ std::vector<unsigned int> sort_libraries() {
         auto res = select_library(available_libraries, available_books);
         if (res == -1)
             break;
-        std::cerr << res << '\n';
         id_libraries.push_back(res);
     }
 
