@@ -13,6 +13,8 @@ struct Video
 struct Cache
 {
     int capacity;
+
+    std::vector<Video> videos;
 };
 
 struct Connection

@@ -1,5 +1,7 @@
 #include <iostream>
+
 #include "parser.hh"
+#include "utils.hh"
 
 int main() {
   std::vector<Video> videos;
