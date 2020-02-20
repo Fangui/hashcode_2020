@@ -2,8 +2,7 @@ project('hashcode', 'cpp',
   version : '0.1',
   default_options : ['warning_level=1', 'cpp_std=c++17'])
 
-inc = include_directories('gen', 'test_2019/')
+inc = include_directories('gen', '2020/')
 executable('main',
-           'test_2019/main.cc',
-           'test_2019/parse.cc',
+           '2020/main.cc',
            include_directories: inc)
