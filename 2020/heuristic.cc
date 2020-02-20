@@ -15,6 +15,8 @@ int compute_intersection(const std::unordered_set<unsigned int>& books_library, 
 
 int select_library(std::unordered_set<unsigned int> &available_library,
                             std::unordered_set<unsigned int> &available_books) {
+
+    static unsigned cur_day = 0;
     int result = 0;
 
     float max_score = 0;
@@ -22,7 +24,7 @@ int select_library(std::unordered_set<unsigned int> &available_library,
 
         auto &li = libraries[*it];
 
-        if (days < li.signup)
+        if (days < cur_day + li.signup)
             continue;
 
         float score = compute_intersection(li.books, available_books) / li.signup;
@@ -37,8 +39,8 @@ int select_library(std::unordered_set<unsigned int> &available_library,
         available_books.erase(book);
     }
 
-    if (days > libraries[result].signup)
-        days -= libraries[result].signup;
+    if (days > cur_day + libraries[result].signup)
+        cur_day += libraries[result].signup;
     else
     {
         std::cerr << "warning bad behaviour \n";
@@ -65,6 +67,7 @@ std::vector<unsigned int> sort_libraries() {
         auto res = select_library(available_libraries, available_books);
         if (res == -1)
             break;
+        std::cerr << res << '\n';
         id_libraries.push_back(res);
     }
 
