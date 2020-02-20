@@ -17,21 +17,30 @@ std::vector<Library> libraries;
 result compute_result(std::vector<unsigned> id_libs)
 {
     result res;
+
+    auto time = 0u;
+
     auto books_marks = std::vector<bool>(books.size(), false);
     for (auto id_lib : id_libs)
     {
+        time += libraries[id_lib].signup;
         auto books_lib = std::vector<unsigned>(libraries[id_lib].books.begin(),
                                                libraries[id_lib].books.end());
         for (auto it = books_lib.begin(); it != books_lib.end(); it++)
-        {
             if (books_marks[*it])
                 books_lib.erase(it);
-            else
-                books_marks[*it] = true;
-        }
 
         std::sort(books_lib.begin(), books_lib.end(),
                   [](unsigned a, unsigned b) { return books[a] > books[b]; });
+
+        // Remove impossible shipping
+        auto possible = (days - time) * libraries[id_lib].efficiency;
+        if (possible < books_lib.size())
+            books_lib.erase(books_lib.begin() + possible, books_lib.end());
+
+        // Marks shipped books
+        for (const auto id_book : books_lib)
+            books_marks[id_book] = true;
 
         res.emplace_back(id_lib, books_lib);
     }
