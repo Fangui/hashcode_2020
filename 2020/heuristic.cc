@@ -22,12 +22,12 @@ unsigned int select_library(std::unordered_set<unsigned int> &available_library,
         
         auto &li = libraries[*it];
 
-        if (days < li.efficiency)
+        if (days < li.signup)
             continue;
 
         int score = compute_intersection(li.books, available_books);
         if (score > max_score) {
-            max_score = score;
+            max_score = score ;
             result = *it;
         }
     }
@@ -37,8 +37,10 @@ unsigned int select_library(std::unordered_set<unsigned int> &available_library,
         available_books.erase(book);
     }
 
-    if (days > library[result].signup)
-        days -= library[result].signup;
+    if (days > libraries[result].signup)
+        days -= libraries[result].signup;
+    else
+        std::cerr << "warning bad behaviour \n";
 
     return result;
 }
