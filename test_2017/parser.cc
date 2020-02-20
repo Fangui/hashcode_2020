@@ -26,6 +26,12 @@ void parse(const std::string &path, std::vector<Video> &videos, std::vector<Cach
   caches.reserve(nb_caches);
   endpoints.reserve(nb_endpoints);
 
+  for (int i = 0; i < nb_caches; i++) {
+    Cache c{};
+    c.capacity = cache_size;
+    caches.push_back(c);
+  }
+
   for (int i = 0; i < nb_videos; i++) {
     Video v{};
     videos.push_back(v);

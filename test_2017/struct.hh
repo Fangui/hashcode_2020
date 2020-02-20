@@ -14,7 +14,7 @@ struct Cache
 {
     int capacity;
 
-    std::vector<Video> videos;
+    std::vector<int> videos_idx;
 };
 
 struct Connection
