@@ -30,7 +30,7 @@ T AlgoGen<T>::apply(const unsigned size, const unsigned max_iterations)
             best_score = bests.rbegin()->first;
             dump_(bests.rbegin()->second);
         }
-        std::cerr << "Best Score: " << best_score << std::endl;
+        std::cerr << "Best Score: " << (size_t)best_score << std::endl;
     }
     return bests.rbegin()->second;
 }

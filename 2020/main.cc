@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 
+#include "algo-gen.hh"
 #include "dump.hh"
 #include "heuristic.hh"
 #include "parse.hh"
@@ -72,7 +73,7 @@ int main(int argc, char* argv[])
         auto file = std::ofstream(argv[1]);
         if (!file.is_open())
         {
-            std::cerr << "Couldn't open " << argv[1] << std::endl;
+            std::cerr << "couldn't open " << argv[1] << std::endl;
             exit(2);
         }
         file << res;
@@ -80,11 +81,78 @@ int main(int argc, char* argv[])
 
     auto id_libraries = sort_libraries();
 
+    // ALGO GEN
+
+    // Dump
+    AlgoGen<std::vector<unsigned>>::dump_f dump_bis =
+        [argv](const std::vector<unsigned>& res) {
+            auto file = std::ofstream(argv[1]);
+            if (!file.is_open())
+            {
+                std::cerr << "couldn't open " << argv[1] << std::endl;
+                exit(2);
+            }
+            file << compute_result(res);
+        };
+
+    // Generation
+    AlgoGen<std::vector<unsigned>>::generation_f generation =
+        [&id_libraries]() { return id_libraries; };
+
+    // Mutation
+    AlgoGen<std::vector<unsigned>>::mutation_f mutation =
+        [](const std::map<double, std::vector<unsigned>>& best) {
+            std::vector<std::vector<unsigned>> new_gen;
+            for (auto entity : best)
+            {
+                auto& new_entity = entity.second;
+                for (auto i = 0u; i < 1; i++)
+                {
+                    size_t i_1 = std::rand() % new_entity.size();
+                    size_t i_2 = std::rand() % new_entity.size();
+                    std::swap(new_entity[i_1], new_entity[i_2]);
+                }
+                new_gen.push_back(new_entity);
+            }
+            return new_gen;
+        };
+
+    // Score
+    AlgoGen<std::vector<unsigned>>::score_f score_bis =
+        [](const std::vector<unsigned>& entity) {
+            auto res = compute_result(entity);
+            return (double)score(res);
+        };
+
+    // Reste
+    auto gen = AlgoGen<std::vector<unsigned>>(score_bis, generation, mutation,
+                                              dump_bis);
+    std::cout << "Start Gen" << std::endl;
+    id_libraries = gen(10000);
+
+    // auto best = 0u;
+    // for (auto i = 0u; i < id_libraries.size(); ++i)
+    // {
+    //     for (auto j = i; j < id_libraries.size(); ++j)
+    //     {
+    //         if (i == j)
+    //             continue;
+    //         std::swap(id_libraries[i], id_libraries[j]);
+    //         auto res = compute_result(id_libraries);
+    //         if (score(res) > best)
+    //         {
+    //             std::cout << score(res) << std::endl;
+    //             best = score(res);
+    //             dump(res);
+    //         } else
+    //             std::swap(id_libraries[i], id_libraries[j]);
+    //     }
+    //     std::cout << i << "/" << id_libraries.size() << std::endl;
+    // }
+
     auto res = compute_result(id_libraries);
-
     dump(res);
-
-    std::cout << "Score: " << score(res) << std::endl;
+    std::cout << "SCORE FINALE: " << score(res) << std::endl;
 
     return 0;
 }
