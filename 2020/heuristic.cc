@@ -17,7 +17,7 @@ unsigned int select_library(std::unordered_set<unsigned int> &available_library,
                             std::unordered_set<unsigned int> &available_books) {
     int result = 0;
 
-    int max_score = 0;
+    float max_score = 0;
     for (auto it = available_library.cbegin(); it != available_library.cend(); it++) {
         
         auto &li = libraries[*it];
@@ -25,7 +25,7 @@ unsigned int select_library(std::unordered_set<unsigned int> &available_library,
         if (days < li.signup)
             continue;
 
-        int score = compute_intersection(li.books, available_books);
+        float score = compute_intersection(li.books, available_books) / li.signup;
         if (score > max_score) {
             max_score = score ;
             result = *it;
@@ -40,7 +40,10 @@ unsigned int select_library(std::unordered_set<unsigned int> &available_library,
     if (days > libraries[result].signup)
         days -= libraries[result].signup;
     else
+    {
         std::cerr << "warning bad behaviour \n";
+        return -1;
+    }
 
     return result;
 }
@@ -59,7 +62,8 @@ std::vector<unsigned int> sort_libraries() {
     // Iterate
     std::vector<unsigned int> id_libraries{};
     for (auto i = 0u; i < libraries.size(); i++) {
-        id_libraries.push_back(select_library(available_libraries, available_books));
+        auto res = select_library(available_libraries, available_books);
+        id_libraries.push_back(res);
     }
 
     return id_libraries;
