@@ -5,4 +5,5 @@ project('hashcode', 'cpp',
 inc = include_directories('gen', '2020/')
 executable('main',
            '2020/main.cc',
+           '2020/heuristic.cc',
            include_directories: inc)

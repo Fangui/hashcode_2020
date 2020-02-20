@@ -37,16 +37,16 @@ std::vector<unsigned int> sort_libraries() {
     // initialize
     std::unordered_set<unsigned int> available_books;
     std::unordered_set<unsigned int> available_libraries;
-    for (int i = 0; i < books.size(); i++) {
+    for (auto i = 0u; i < books.size(); i++) {
         available_books.insert(i);
     }
-    for (int i = 0; i < libraries.size(); i++) {
+    for (auto i = 0u; i < libraries.size(); i++) {
         available_libraries.insert(i);
     }
 
     // Iterate
     std::vector<unsigned int> id_libraries{};
-    for (int i = 0; i < libraries.size(); i++) {
+    for (auto i = 0u; i < libraries.size(); i++) {
         id_libraries.push_back(select_library(available_libraries, available_books));
         std::cerr << id_libraries[id_libraries.size() - 1] << "\n";
     }
