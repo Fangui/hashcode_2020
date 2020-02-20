@@ -13,13 +13,13 @@ int compute_intersection(const std::unordered_set<unsigned int>& books_library, 
     return score;
 }
 
-unsigned int select_library(std::unordered_set<unsigned int> &available_library,
+int select_library(std::unordered_set<unsigned int> &available_library,
                             std::unordered_set<unsigned int> &available_books) {
     int result = 0;
 
     float max_score = 0;
     for (auto it = available_library.cbegin(); it != available_library.cend(); it++) {
-        
+
         auto &li = libraries[*it];
 
         if (days < li.signup)
