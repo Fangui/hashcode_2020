@@ -10,6 +10,11 @@
 
 struct Output
 {
+    Output(unsigned id_library, std::vector<unsigned> books)
+        : id_library(id_library)
+        , books(books)
+    {}
+
     unsigned int id_library;
     std::vector<unsigned int> books;
 };
