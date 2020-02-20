@@ -4,8 +4,15 @@
 
 struct Library
 {
+    Library(unsigned signup, unsigned efficiency,
+            std::unordered_set<unsigned> books)
+        : signup(signup)
+        , efficiency(efficiency)
+        , books(books)
+    {}
+
     unsigned signup;
     unsigned efficiency;
 
-    std::unordered_set<int> books;
+    std::unordered_set<unsigned int> books;
 };
