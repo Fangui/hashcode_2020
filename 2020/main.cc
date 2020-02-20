@@ -24,6 +24,9 @@ result compute_result(std::vector<unsigned> id_libs)
     for (auto id_lib : id_libs)
     {
         time += libraries[id_lib].signup;
+        if (time > days)
+            break;
+
         auto books_lib = std::vector<unsigned>(libraries[id_lib].books.begin(),
                                                libraries[id_lib].books.end());
         for (auto it = books_lib.begin(); it != books_lib.end(); it++)
