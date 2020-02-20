@@ -4,9 +4,11 @@
 
 #include "parse.hh"
 
-double score(const result& res)
+size_t score(const result& res)
 {
-    double result = 0.;
-    // TODO Compute
+    size_t result = 0;
+    for (const auto& output : res)
+        for (const auto& book : output.books)
+            result += books[book];
     return result;
 }
