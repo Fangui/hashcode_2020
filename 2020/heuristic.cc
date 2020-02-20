@@ -19,7 +19,13 @@ unsigned int select_library(std::unordered_set<unsigned int> &available_library,
 
     int max_score = 0;
     for (auto it = available_library.cbegin(); it != available_library.cend(); it++) {
-        int score = compute_intersection(libraries[*it].books, available_books);
+        
+        auto &li = libraries[*it];
+
+        if (days < li.efficiency)
+            continue;
+
+        int score = compute_intersection(li.books, available_books);
         if (score > max_score) {
             max_score = score;
             result = *it;
@@ -30,6 +36,10 @@ unsigned int select_library(std::unordered_set<unsigned int> &available_library,
     for (unsigned int book : libraries[result].books) {
         available_books.erase(book);
     }
+
+    if (days > library[result].signup)
+        days -= library[result].signup;
+
     return result;
 }
 
