@@ -14,11 +14,8 @@ struct Output
     std::vector<unsigned int> books;
 };
 
-using result =
-    std::vector<Output>; // TODO Define a result (Declare all stuctures needed
-                         // above or in another header)
+using result = std::vector<Output>;
 
-// TODO
 // Declare global variables used to store parsed data.
 // You might want to pre-process the data
 unsigned int days;
@@ -27,7 +24,6 @@ std::vector<Library> libraries;
 
 inline void parse()
 {
-    // TODO
     // Parse STDIN and fill above global variables.
     // Display on STDERR stats about the data (size, proportion...)
     unsigned int nb_books;
@@ -55,4 +51,7 @@ inline void parse()
         }
         libraries.emplace_back(signup, efficiency, books);
     }
+
+    std::cerr << "DAYS: " << days << std::endl;
+    std::cerr << "NB LIBS: " << nb_libs << std::endl;
 }
