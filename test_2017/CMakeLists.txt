@@ -3,4 +3,4 @@ project(test_2017)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(test_2017 main.cc parser.cc)
+add_executable(test_2017 main.cc parser.cc output.cc)
